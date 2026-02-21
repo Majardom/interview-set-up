@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConfigurationManagementSystem.Repositories;
 
-public class ConfigurationEntitiesRepository
+public class ConfigurationEntitiesRepository : IDisposable
 {
     private readonly AppDbContext _context;
 
@@ -20,6 +20,9 @@ public class ConfigurationEntitiesRepository
    
     public async Task<ConfigurationEntity> GetByKeyAsync(string key)
     {
+        if (string.IsNullOrEmpty(key))
+            throw new ArgumentNullException(nameof(key));
+
         return await _context.Configurations
             .FirstOrDefaultAsync(x => x.Key.ToLower() == key.ToLower());
     }
@@ -33,4 +36,9 @@ public class ConfigurationEntitiesRepository
     {
         await _context.SaveChangesAsync();
     }
+
+	public void Dispose()
+	{
+		_context?.Dispose();
+	}
 }

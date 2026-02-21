@@ -9,7 +9,7 @@ namespace ConfigurationManagementSystem.Controllers;
 [Route("[controller]")]
 public class ConfigurationEntitiesController : ControllerBase
 {
-    private readonly ConfigurationEntitiesRepository _repository;
+    private ConfigurationEntitiesRepository _repository { get; set; }
 
     public ConfigurationEntitiesController(AppDbContext context)
     {
@@ -33,10 +33,10 @@ public class ConfigurationEntitiesController : ControllerBase
     }
 
     [HttpPost("Update")]
-    public async Task<IActionResult> Update(ConfigurationEntity entity)
+    public  IActionResult Update(ConfigurationEntity entity)
     {
-        await _repository.SaveChangesAsync();
-        return Ok();
+		_repository.SaveChangesAsync();
+		return Ok();
     }
 
     [HttpPost("Delete")]
